@@ -58,6 +58,11 @@ class WorldPublisher:
             new_model['position'] = [0, 0, 0]
             new_model['orientation'] = [0, 0, 0, 1]
             new_model['scale'] = [1, 1, 1]
+            new_model['rgba'] = [0.5, 0.5, 0.5, 1.0]
+            
+            if 'rgba' in models[model]:
+                if len(models[model]['rgba']) == 4:
+                    new_model['rgba'] = models[model]['rgba']
 
             if 'pose' in models[model]:
                 if 'position' in models[model]['pose']:
@@ -105,6 +110,7 @@ class WorldPublisher:
             print('\t Position: ' + str(self._model_paths[model]['position']))
             print('\t Orientation: ' + str(self._model_paths[model]['orientation']))
             print('\t Scale: ' + str(self._model_paths[model]['scale']))
+            print('\t Color: ' + str(self._model_paths[model]['rgba']))
 
     def publish_meshes(self):
         markers = MarkerArray()
@@ -137,10 +143,10 @@ class WorldPublisher:
             marker.pose.orientation.y = self._model_paths[model]['orientation'][1]
             marker.pose.orientation.z = self._model_paths[model]['orientation'][2]
             marker.pose.orientation.w = self._model_paths[model]['orientation'][3]
-            marker.color.a = 0.2
-            marker.color.r = 0.0
-            marker.color.g = 0.0
-            marker.color.b = 1.0 - float(i) / total_models
+            marker.color.a = self._model_paths[model]['rgba'][3]  # 0.2
+            marker.color.r = self._model_paths[model]['rgba'][0]  # 0.0
+            marker.color.g = self._model_paths[model]['rgba'][1]  # 0.0
+            marker.color.b = self._model_paths[model]['rgba'][2]  # 1.0 - float(i) / total_models
 
             markers.markers.append(marker)
             i += 1
